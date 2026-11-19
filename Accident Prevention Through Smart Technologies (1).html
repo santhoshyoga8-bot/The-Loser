@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Accident Prevention Through Smart Technologies</title>
+<style>
+:root{--bg:#0b1020;--fg:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:12px}
+#stage{container-type:inline-size;position:relative;width:min(100%,1100px);aspect-ratio:16/9;overflow:hidden;border-radius:12px;background:linear-gradient(#2b2d6e,#e8895a 70%);transition:background 1.5s}
+#stage.s2{background:linear-gradient(#3a1d2e,#8a3b3b 70%)}
+#stage.s3,#stage.s4,#stage.s5{background:linear-gradient(#06142e,#0e3a6b 70%)}
+#stage.s6{background:linear-gradient(#5aa9e6,#ffd89b 75%)}
+.road{position:absolute;left:0;right:0;bottom:0;height:38%;background:#262a33}
+.road::before{content:"";position:absolute;left:0;right:0;top:48%;height:3px;background:repeating-linear-gradient(90deg,#f5d44b 0 6cqw,transparent 6cqw 12cqw);animation:dash 1s linear infinite}
+@keyframes dash{to{background-position:-12cqw 0}}
+.city{position:absolute;left:0;right:0;bottom:36%;height:22%;background:linear-gradient(90deg,#141a33 0 8%,transparent 8% 10%,#1a2142 10% 22%,transparent 22% 24%,#141a33 24% 40%,transparent 40% 42%,#1a2142 42% 58%,transparent 58% 60%,#141a33 60% 78%,transparent 78% 80%,#1a2142 80% 100%);opacity:.8}
+.sun{position:absolute;left:50%;bottom:30%;width:14cqw;height:14cqw;margin-left:-7cqw;border-radius:50%;background:radial-gradient(#fff6c8,#ffb347);opacity:0;transform:translateY(8cqw);transition:all 5s}
+#stage.s6 .sun{opacity:1;transform:none}
+.veh{position:absolute;font-size:7cqw;line-height:1;animation:drive linear infinite}
+@keyframes drive{from{left:-12cqw}to{left:110cqw}}
+@keyframes driveL{from{left:110cqw}to{left:-12cqw}}
+.sc{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .6s}
+.sc.on{opacity:1}
+.ttl{position:absolute;top:6%;left:0;right:0;text-align:center;font-size:4cqw;font-weight:700;text-shadow:0 2px 10px #000a}
+.ttl small{display:block;font-size:2cqw;font-weight:400;opacity:.9;margin-top:.5cqw}
+.card{position:absolute;top:28%;width:34cqw;padding:2cqw;border-radius:1.2cqw;background:#0008;border:2px solid #ff5c5c;text-align:center;font-size:2.4cqw}
+.card b{display:block;font-size:7cqw;margin-bottom:.5cqw}
+.card i{color:#ff8b8b;font-style:normal;font-weight:700}
+.alert{position:absolute;padding:1.2cqw 2.2cqw;border-radius:1cqw;background:#c62828;font-weight:800;font-size:2.6cqw;box-shadow:0 0 30px #ff3d3d;opacity:0}
+.cam{position:absolute;font-size:7cqw}
+.box{position:absolute;border:.5cqw solid #4cff7a;border-radius:.8cqw;box-shadow:0 0 18px #4cff7a88}
+.on .box{animation:tint 10s forwards}
+@keyframes tint{0%,35%{border-color:#4cff7a;box-shadow:0 0 18px #4cff7a88}45%,100%{border-color:#ff3d3d;box-shadow:0 0 22px #ff3d3d}}
+.on .alert{animation:pop 10s forwards}
+@keyframes pop{0%,40%{opacity:0;transform:scale(.7)}50%,100%{opacity:1;transform:scale(1)}}
+.hud{position:absolute;left:6%;top:24%;width:88%;height:46%;border:2px solid #6fd3ff;border-radius:1.5cqw;background:#02142acc;overflow:hidden}
+.scan{position:absolute;left:0;right:0;height:.6cqw;background:#6fd3ff;box-shadow:0 0 16px #6fd3ff}
+.on .scan{animation:scan 3s linear infinite}
+@keyframes scan{from{top:0}to{top:100%}}
+.steps{position:absolute;top:30%;left:5%;right:5%;display:flex;gap:2cqw;justify-content:center;align-items:stretch}
+.step{flex:1;text-align:center;padding:2cqw 1cqw;border-radius:1.2cqw;background:#0007;border:2px solid #3b5a8a;opacity:.35;font-size:2.2cqw}
+.step b{display:block;font-size:6cqw}
+.on .step{animation:lit 12s forwards}
+.on .step:nth-child(2){animation-delay:4s}.on .step:nth-child(3){animation-delay:8s}
+@keyframes lit{to{opacity:1;border-color:#6fd3ff;box-shadow:0 0 22px #6fd3ff88}}
+.end{position:absolute;bottom:24%;left:0;right:0;text-align:center;font-size:4.4cqw;font-weight:800;text-shadow:0 2px 12px #000a;opacity:0}
+.on .end{animation:pop2 8s forwards}
+@keyframes pop2{0%,60%{opacity:0}80%,100%{opacity:1}}
+#sub{position:absolute;left:4%;right:4%;bottom:3%;text-align:center;font-size:2.3cqw;line-height:1.3;color:#fff;text-shadow:0 0 4px #000,0 0 4px #000,0 0 6px #000;min-height:3em}
+#bar{position:absolute;left:0;bottom:0;height:4px;background:#6fd3ff;width:0}
+#start{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5cqw;background:#050a18ee;z-index:5;text-align:center}
+#start h1{font-size:4cqw;margin:0 4cqw}
+button{font:inherit;cursor:pointer;border:0;border-radius:999px;padding:.8em 1.6em;background:#6fd3ff;color:#06142e;font-weight:700}
+#start button{font-size:2.6cqw}
+.ctl{display:flex;gap:10px;margin-top:12px}
+.ctl button{background:#1c2a4d;color:#fff;padding:.5em 1.2em}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="sun"></div><div class="city"></div><div class="road"></div>
+  <div class="veh" style="bottom:20%;animation-duration:7s">🏍️</div>
+  <div class="veh" style="bottom:8%;animation-duration:9s;animation-delay:-3s">🚗</div>
+  <div class="veh" style="bottom:14%;animation-duration:11s;animation-delay:-6s">🛺</div>
+  <div class="veh" style="bottom:3%;animation-duration:8s;animation-delay:-1s">🚙</div>
+
+  <div class="sc" id="c1"><div class="ttl">Road Accidents in India<small>Busy roads. Millions of journeys every day.</small></div></div>
+
+  <div class="sc" id="c2"><div class="ttl">Simple mistakes, serious risks</div>
+    <div class="card" style="left:10%"><b>🏍️🙂</b><i>No helmet</i><br>Head left unprotected</div>
+    <div class="card" style="right:10%"><b>🚗🙂</b><i>No seat belt</i><br>Belt hanging unused</div></div>
+
+  <div class="sc" id="c3"><div class="ttl">Smart Helmet Detection</div>
+    <div class="cam" style="right:12%;top:18%">📷</div>
+    <div class="box" style="left:40%;top:34%;width:16cqw;height:17cqw"></div>
+    <div class="alert" style="left:32%;top:56%">⚠ NO HELMET DETECTED</div></div>
+
+  <div class="sc" id="c4"><div class="ttl">Smart Seat Belt Detection</div>
+    <div class="hud"><div class="scan"></div>
+      <div style="position:absolute;left:38%;top:12%;font-size:14cqw">🧑‍✈️</div></div>
+    <div class="alert" style="left:28%;top:60%">⚠ SEAT BELT NOT DETECTED</div></div>
+
+  <div class="sc" id="c5"><div class="ttl">How the AI works</div>
+    <div class="steps">
+      <div class="step"><b>📹</b>1. Capture<br>live video</div>
+      <div class="step"><b>🧠</b>2. Recognize<br>helmet ✓ seat belt ✓</div>
+      <div class="step"><b>🔔</b>3. Alert<br>within seconds</div></div></div>
+
+  <div class="sc" id="c6"><div class="ttl">Everyone follows the rules<small>🪖 Helmets on &nbsp; 🔒 Belts fastened &nbsp; ✅ Safe journeys</small></div>
+    <div class="end">Smart Technology, Safer Roads, Better Lives.</div></div>
+
+  <div id="sub"></div><div id="bar"></div>
+  <div id="start"><h1>Accident Prevention Through Smart Technologies</h1>
+    <button id="go">▶ Play video (1 min, sound on)</button></div>
+</div>
+<div class="ctl"><button id="pp">Pause</button><button id="rs">Restart</button></div>
+
+<script>
+var starts=[0,10,20,30,40,52];
+var vo=[
+"Every day, India’s busy roads carry millions of bikes and cars. Sadly, they also see thousands of accidents.",
+"Many accidents involve simple mistakes: riding without a helmet, or driving without a seat belt. One small choice can change everything.",
+"Now meet smart helmet detection. An AI camera spots a rider without a helmet, and instantly triggers a warning alert.",
+"The same technology checks seat belts. If a driver isn’t buckled up, a clear safety warning appears.",
+"Here’s how it works. Cameras capture live video. AI recognizes helmets and seat belts in real time. If something is missing, an alert is generated within seconds.",
+"When everyone follows the rules, everyone gets home safe. Smart Technology, Safer Roads, Better Lives."];
+var cues=[[0,4.5,"Every day, India’s busy roads carry millions of bikes and cars."],[4.5,10,"Sadly, they also see thousands of accidents."],
+[10,15,"Many accidents involve simple mistakes: riding without a helmet, or driving without a seat belt."],[15,20,"One small choice can change everything."],
+[20,25,"Now meet smart helmet detection. An AI camera spots a rider without a helmet"],[25,30,"and instantly triggers a warning alert."],
+[30,35,"The same technology checks seat belts."],[35,40,"If a driver isn’t buckled up, a clear safety warning appears."],
+[40,44,"Here’s how it works. Cameras capture live video."],[44,48,"AI recognizes helmets and seat belts in real time."],
+[48,52,"If something is missing, an alert is generated within seconds."],[52,56,"When everyone follows the rules, everyone gets home safe."],
+[56,60,"Smart Technology, Safer Roads, Better Lives."]];
+var t=0,cur=-1,playing=false,timer=null,ctx=null,mus=null,voice=null;
+var $=function(i){return document.getElementById(i)};
+function pickVoice(){var v=speechSynthesis.getVoices();voice=v.find(function(x){return x.lang==="en-IN"})||v.find(function(x){return /^en/.test(x.lang)})||null}
+try{speechSynthesis.onvoiceschanged=pickVoice;pickVoice()}catch(e){}
+function speak(i){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(vo[i]);if(voice)u.voice=voice;u.lang="en-IN";u.rate=1.05;speechSynthesis.speak(u)}catch(e){}}
+function show(i){cur=i;for(var k=0;k<6;k++){$("c"+(k+1)).classList.toggle("on",k===i)}
+ $("stage").className="s"+(i+1);$("stage").id="stage"}
+function music(){try{ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();var ch=[[220,261.6,329.6],[174.6,220,261.6],[261.6,329.6,392],[196,246.9,293.7]],n=0;
+ function play(){if(!playing)return;var c=ch[n++%4],now=ctx.currentTime;c.forEach(function(f,j){var o=ctx.createOscillator(),g=ctx.createGain();o.type="triangle";o.frequency.value=f;
+ g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(.035,now+1);g.gain.linearRampToValueAtTime(0,now+4);o.connect(g);g.connect(ctx.destination);o.start(now);o.stop(now+4.1);
+ var o2=ctx.createOscillator(),g2=ctx.createGain();o2.type="sine";o2.frequency.value=f*2;var s=now+j*1.1;g2.gain.setValueAtTime(0,s);g2.gain.linearRampToValueAtTime(.025,s+.05);g2.gain.linearRampToValueAtTime(0,s+1);o2.connect(g2);g2.connect(ctx.destination);o2.start(s);o2.stop(s+1.1)})}
+ play();mus=setInterval(play,4000)}catch(e){}}
+function tick(){t+=0.1;var i=0;for(var k=0;k<starts.length;k++)if(t>=starts[k])i=k;
+ if(i!==cur){show(i);speak(i)}
+ var s="";cues.forEach(function(c){if(t>=c[0]&&t<c[1])s=c[2]});$("sub").textContent=s;
+ $("bar").style.width=Math.min(100,t/60*100)+"%";
+ if(t>=60){stop();$("pp").textContent="Replay";t=0;cur=-1;}}
+function run(){playing=true;timer=setInterval(tick,100);if(ctx&&ctx.state==="suspended")ctx.resume();if(!mus||true){clearInterval(mus);music()}try{speechSynthesis.resume()}catch(e){}$("pp").textContent="Pause"}
+function stop(){playing=false;clearInterval(timer);clearInterval(mus);try{speechSynthesis.cancel()}catch(e){}}
+function pause(){playing=false;clearInterval(timer);clearInterval(mus);try{speechSynthesis.pause()}catch(e){}$("pp").textContent="Resume"}
+$("go").onclick=function(){$("start").style.display="none";t=0;cur=-1;run()};
+$("pp").onclick=function(){if(playing)pause();else{if(t===0)cur=-1;run()}};
+$("rs").onclick=function(){stop();t=0;cur=-1;$("start").style.display="none";run()};
+</script>
+</body>
+</html>
